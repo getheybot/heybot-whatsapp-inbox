@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1792195200000,
+      "tag": "0000_whatsapp_events",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792781171059,
+      "tag": "0001_create_contacts",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792781171060,
+      "tag": "0002_create_conversations",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792781171061,
+      "tag": "0003_create_conversation_messages",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792783350347,
+      "tag": "0004_widen_whatsapp_event_category",
+      "breakpoints": true
+    }
+  ]
+}

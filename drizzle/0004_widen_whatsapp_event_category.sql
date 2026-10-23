@@ -1,0 +1,1 @@
+ALTER TABLE "whatsapp_events" ALTER COLUMN "category" SET DATA TYPE varchar(32);
