@@ -7,7 +7,7 @@
     "dev": "next dev --turbopack",
     "build": "npm run db:migrate && next build",
     "start": "next start",
-    "test:heybot": "node heybot/test.cjs && node heybot/storage/test.cjs",
+    "test:heybot": "node heybot/test.cjs && node heybot/storage/test.cjs && node heybot/whatsapp/test.cjs",
     "test:db": "node lib/db.test.cjs",
     "db:migrate": "node scripts/migrate.cjs",
     "db:generate": "drizzle-kit generate",

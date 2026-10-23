@@ -31,7 +31,7 @@ const columns = [
   assert.throws(() => assertInitialSchema(columns, ['wamid']), /primary key/);
 
   const migrations = readMigrationFiles({ migrationsFolder: path.join(__dirname, '../drizzle') });
-  assert.equal(migrations.length, 5);
+  assert.equal(migrations.length, 6);
   for (let i = 1; i <= 3; i++) {
     assert.equal(migrations[i].sql.filter(sql => /CREATE TABLE\s/.test(sql)).length, 1,
       'Each new migration must create exactly one table');

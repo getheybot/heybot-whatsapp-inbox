@@ -1,5 +1,7 @@
 # Heybot WhatsApp events (internal package)
 
+For sending service messages and templates, see the [WhatsApp JavaScript client](./whatsapp/README.md).
+
 Import from `@/heybot` inside this Next.js application. No runtime dependencies.
 
 `HeybotEventProcessor` selects strategies using Meta's `entry[].changes[].field`.

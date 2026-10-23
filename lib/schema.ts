@@ -34,6 +34,7 @@ export const conversations = pgTable('conversations', {
 
 export const conversationMessages = pgTable('conversation_messages', {
   id: bigserial('id', { mode: 'bigint' }).primaryKey(),
+  nanoId: varchar('nano_id', { length: 21 }),
   wamid: varchar('wamid', { length: 255 }).notNull(),
   conversationId: bigint('conversation_id', { mode: 'bigint' }).notNull().references(() => conversations.id),
   direction: messageDirection('direction').notNull(),
@@ -45,6 +46,7 @@ export const conversationMessages = pgTable('conversation_messages', {
   updatedAt: timestamp('updated_at', { precision: 0, mode: 'date' }),
 }, table => [
   index('conversation_messages_wamid_idx').on(table.wamid),
+  index('conversation_messages_nano_id_idx').on(table.nanoId),
 ]);
 
 export const whatsappEvents = pgTable('whatsapp_events', {

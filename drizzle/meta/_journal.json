@@ -36,6 +36,13 @@
       "when": 1792783350347,
       "tag": "0004_widen_whatsapp_event_category",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792787023641,
+      "tag": "0005_add_conversation_messages_nano_id",
+      "breakpoints": true
     }
   ]
 }
