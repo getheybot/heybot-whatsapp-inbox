@@ -16,6 +16,7 @@ export const contacts = pgTable('contacts', {
   updatedAt: timestamp('updated_at', { precision: 0, mode: 'date' }),
 }, table => [
   check('contacts_phone_unsigned', sql`${table.phone} >= 0 AND ${table.phone} <= 18446744073709551615`),
+  index('contacts_last_message_at_id_idx').on(table.lastMessageAt.desc(), table.id.desc()),
 ]);
 
 export const conversations = pgTable('conversations', {
@@ -30,6 +31,7 @@ export const conversations = pgTable('conversations', {
   updatedAt: timestamp('updated_at', { precision: 0, mode: 'date' }),
 }, table => [
   check('conversations_unread_unsigned', sql`${table.unread} >= 0 AND ${table.unread} <= 4294967295`),
+  index('conversations_contact_id_idx').on(table.contactId),
 ]);
 
 export const conversationMessages = pgTable('conversation_messages', {
@@ -47,6 +49,7 @@ export const conversationMessages = pgTable('conversation_messages', {
 }, table => [
   index('conversation_messages_wamid_idx').on(table.wamid),
   index('conversation_messages_nano_id_idx').on(table.nanoId),
+  index('conversation_messages_conversation_id_id_idx').on(table.conversationId, table.id),
 ]);
 
 export const whatsappEvents = pgTable('whatsapp_events', {

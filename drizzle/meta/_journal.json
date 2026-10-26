@@ -43,6 +43,13 @@
       "when": 1792787023641,
       "tag": "0005_add_conversation_messages_nano_id",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792800488085,
+      "tag": "0006_add_inbox_read_indexes",
+      "breakpoints": true
     }
   ]
 }
