@@ -8,7 +8,7 @@
     "build": "npm run db:migrate && next build",
     "start": "next start",
     "test:heybot": "node heybot/test.cjs && node heybot/storage/test.cjs && node heybot/whatsapp/test.cjs",
-    "test:db": "node lib/db.test.cjs",
+    "test:db": "node lib/db.test.cjs && node lib/conversation-queries.test.cjs",
     "db:migrate": "node scripts/migrate.cjs",
     "db:generate": "drizzle-kit generate",
     "test:migrations": "node scripts/migrate.test.cjs"

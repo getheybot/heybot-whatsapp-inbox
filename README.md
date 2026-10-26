@@ -1,6 +1,6 @@
 # Heybot - WhatsApp Event Debugger
 
-Next.js dashboard for WhatsApp events received through Heybot. Message and delivery events are sent through Vercel Queues and stored in `public.whatsapp_events`. The dashboard provides status filters, search, pagination, and syntax-highlighted original webhook payloads. This application is deployed exclusively on Vercel and requires Vercel Queues.
+Next.js inbox and event debugger for WhatsApp events received through Heybot. Message and delivery events are sent through Vercel Queues and stored in `public.whatsapp_events`; incoming messages also create contacts, conversations, and conversation messages. `/dashboard` shows those conversations in a WhatsApp-style inbox, and `/events` provides status filters, search, pagination, and syntax-highlighted original webhook payloads. This application is deployed exclusively on Vercel and requires Vercel Queues.
 
 ## Requirements
 
@@ -114,7 +114,7 @@ The package recognizes messages, delivery events, template status, template qual
 
 ### 6. Verify the deployment
 
-Open `https://YOUR_DOMAIN/login`, sign in with an email in `EMAILS_ALLOWED`, and visit `/dashboard`. After sending an event through Heybot, confirm that a record appears with its original payload in the raw event panel.
+Open `https://YOUR_DOMAIN/login`, sign in with an email in `EMAILS_ALLOWED`, and visit `/events`. After sending an event through Heybot, confirm that a record appears with its original payload in the raw event panel. Incoming messages also appear as conversations in `/dashboard`.
 
 Inspect Vercel runtime logs for both the webhook receiver and the queue consumer. For message and delivery events, HTTP `200` from the receiver means queue acceptance; persistence completes asynchronously. A GET request returning `200` only confirms that the receiver route responds.
 
@@ -138,9 +138,24 @@ npm run test:migrations
 
 The tests exercise real Drizzle queries and migration logic with mocked PostgreSQL and queue transports. They do not confirm connectivity to a deployed database. Vercel runs `npm run build` during deployment; verify the deployed integration using step 6 above.
 
+## Inbox
+
+`/dashboard` lists one row per contact with conversations, ordered by its latest message, up to the 100 most recent contacts. Opening a contact shows its latest 50 messages across all of its conversations, and **Load earlier messages** fetches the previous 50. The browser loads both from the API below, ignores repeated clicks while a request is in progress, and reuses responses for the session (the conversation list for 30 seconds); the refresh button reloads them. Message and list dates are formatted in the viewer's browser timezone and locale. Multimedia messages are shown as placeholders. The message input is disabled when the contact's latest conversation is closed; sending messages is not implemented.
+
+### Inbox API
+
+Both endpoints require a signed-in session (`401` otherwise). IDs are returned as strings, and messages include a text/media preview instead of the stored WhatsApp payload.
+
+| Endpoint | Response |
+| --- | --- |
+| `GET /api/conversations?limit=100` | `{ conversations: [{ id, name, phone, unread, lastMessage }] }`, newest first. `id` is the contact ID; `limit` is 1–100 (default 100). |
+| `GET /api/conversations/{id}/messages?limit=50&before={nextCursor}` | `{ contact, status, messages, nextCursor }` for a contact `id` from the list. `messages` are oldest first; `nextCursor` is the ID of the oldest message in the page, or `null` when there are no earlier messages. `limit` is 1–50 (default 50) and larger values return `400`. |
+
+The list is read through `contacts.last_message_at`, so any future writer of conversation messages, including outbound messages, must keep that column current. Migration `0006` adds the indexes these queries use; on a large existing database, apply it during a quiet period, because a regular `CREATE INDEX` blocks writes to the table while it builds.
+
 ## Searching events
 
-Dashboard search matches WAMID or a numeric row ID. Searching nested JSON Request IDs is not implemented. Events are displayed 20 per page, ordered by `event_at` descending.
+`/events` search matches WAMID or a numeric row ID. Searching nested JSON Request IDs is not implemented. Events are displayed 20 per page, ordered by `event_at` descending.
 
 ## Authentication
 
